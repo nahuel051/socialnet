@@ -1,0 +1,61 @@
+-- Tabla de Usuarios
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    foto_perfil VARCHAR(255),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla de Publicaciones
+CREATE TABLE publicaciones (
+    id_publicacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    imagen VARCHAR(255),
+    descripcion TEXT,
+    fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla de Comentarios
+CREATE TABLE comentarios (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+   	id_publicacion INT,
+    id_usuario INT,
+    comentario TEXT,
+    fecha_comentario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_publicacion) REFERENCES publicaciones(id_publicacion),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla de Me Gusta
+CREATE TABLE megusta (
+    id_megusta INT AUTO_INCREMENT PRIMARY KEY,
+    id_publicacion INT,
+    id_usuario INT,
+    fecha_megusta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_publicacion) REFERENCES publicaciones(id_publicacion),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla de Seguidores
+CREATE TABLE seguidores (
+    id_seguidores INT AUTO_INCREMENT PRIMARY KEY,
+    id_seguidor INT,
+    id_siguiendo INT,
+    fecha_seguimiento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_seguidor) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_siguiendo) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla de Notificaciones
+CREATE TABLE notificaciones (
+    id_notifacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    type VARCHAR(50),
+    object_id INT,
+    is_read BOOLEAN DEFAULT FALSE,
+    fecha_notificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios( id_usuario)
+);
