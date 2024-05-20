@@ -2,7 +2,7 @@
 include('conexion.php');
 session_start();
 if(!isset($_SESSION['registrar'])){ // Aquí debería ser 'registro', no 'usuario'
-    header('Location: login.php');
+    header('Location: login.html');
     exit(); // Agrega esto para asegurarte de que se detenga la ejecución del script después de redirigir
 }
 ?>

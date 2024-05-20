@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#formulario").submit(function(event){
+                event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+                
+                var formData = new FormData(this); // Crear un objeto FormData con el formulario
+
+                $.ajax({
+                    type: "POST",
+                    url: "registrar.php",
+                    data: formData,
+                    contentType: false, // No establecer el tipo de contenido
+                    processData: false, // No procesar los datos de la forma predeterminada
+                    success: function(response){
+                        if(response === "success"){
+                            window.location.href = "login.html"; // Redirigir al usuario
+                        } else {
+                            $("#mensaje").html(response); // Mostrar el mensaje de error
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="formulario" enctype="multipart/form-data" autocomplete="off">
+        <input type="text" name="username" placeholder="Nombre de usuario" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="file" name="foto_perfil" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <input type="password" name="password2" placeholder="Repetir contraseña" required>
+        <input type="submit" value="Registrar" name="registrar">
+        <a href="login.html">Login</a>
+    </form>
+    <div id="mensaje"></div>
+</body>
+</html>
