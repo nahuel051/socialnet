@@ -42,7 +42,22 @@ if (!isset($_SESSION['registrar'])) {
             }
             ?>
         </div>
-        <input type="submit" value="Me gusta" name="Like">
+        <div class="like">
+        <?php
+        $sql_cantidad_like = "SELECT count(id_megusta) as total_megusta FROM megusta m JOIN usuarios u ON m.id_usuario = u.id_usuario WHERE m.id_publicacion = $id_publicacion";
+        $result_cantidad_like = mysqli_query($con, $sql_cantidad_like);
+        if($result_cantidad_like){
+            $row_like = mysqli_fetch_assoc($result_cantidad_like);
+            $total_like = $row_like['total_megusta'];
+        }
+        ?>
+        <a href="cantidad_like">a <?php echo $total_like?> les gusta</a>
+        <form action="like.php" method="post">
+            <input type="submit" value="Me gusta" name="like">
+            <input type="hidden" name="id_publicacion" value="<?php echo $row_publicacion['id_publicacion']; ?>">
+        </form>
+        </div>
+
     </div>
     <?php
     }
