@@ -16,5 +16,6 @@ if(!isset($_SESSION['registrar'])){ // Aquí debería ser 'registro', no 'usuari
 </head>
 <body>
     <a href="cerrar.php">Cerrar Sesion</a>
+    <a href="publicar.html">Publicar</a>
 </body>
 </html>
