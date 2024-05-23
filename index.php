@@ -42,7 +42,7 @@ if (is_array($id_usuario_sesion)) {
                 <input type="hidden" name="id_publicacion" value="<?php echo $row_publicacion['id_publicacion']; ?>">
                 <input type="submit" value="Enviar" name="Comentario">
             </form>
-            <div class="mensaje_comentario"></div> <!-- Cambiado a clase -->
+            <div class="mensaje_comentario"></div>
         </div>
         <div class="content-comentario" id="comentarios-<?php echo $row_publicacion['id_publicacion']; ?>">
         <?php 
