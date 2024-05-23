@@ -57,7 +57,6 @@ if (!isset($_SESSION['registrar'])) {
             <input type="hidden" name="id_publicacion" value="<?php echo $row_publicacion['id_publicacion']; ?>">
         </form>
         </div>
-
     </div>
     <?php
     }

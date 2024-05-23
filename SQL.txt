@@ -59,3 +59,6 @@ CREATE TABLE notificaciones (
     fecha_notificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios( id_usuario)
 );
+
+CONSULTAS EXTRAS:
+ALTER TABLE megusta ADD CONSTRAINT unique_like UNIQUE (id_publicacion, id_usuario);

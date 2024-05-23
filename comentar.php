@@ -1,6 +1,7 @@
 <?php
 include('conexion.php');
 session_start();
+$mensaje_comentario = "";
 if (!isset($_SESSION['registrar'])) { 
     header('Location: login.html');
     exit(); 
@@ -25,7 +26,7 @@ if ($_POST) {
             echo "Error: " . mysqli_error($con);
         }
     } else {
-        echo "Ingrese comentario";
+        $mensaje_comentario = "Ingrese comentario";
     }
 }
 ?>
