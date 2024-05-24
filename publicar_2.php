@@ -31,6 +31,7 @@
     </script>
 </head>
 <body>
+<?php include('lateral.php')?>
     <form id="formulario" enctype="multipart/form-data" autocomplete="off" >
         <input type="file" name="imagen">
         <textarea name="descripcion" placeholder="Descripción"></textarea>

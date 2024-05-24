@@ -2,6 +2,7 @@
 session_start();
 include('conexion.php');
 include('validaciones.php');
+
 $mensaje = "";
 
 if($_POST){

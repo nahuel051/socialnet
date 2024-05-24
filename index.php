@@ -20,8 +20,7 @@ if (is_array($id_usuario_sesion)) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <a href="cerrar.php">Cerrar Sesion</a>
-    <a href="publicar.html">Publicar</a>
+    <?php include('lateral.php')?>
     <?php 
     $sql_publicaciones = "SELECT * FROM publicaciones";
     $result_publicaciones = mysqli_query($con, $sql_publicaciones);
