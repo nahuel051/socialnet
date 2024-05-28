@@ -22,7 +22,14 @@ if (is_array($id_usuario_sesion)) {
 <body>
     <?php include('lateral.php')?>
     <?php 
-    $sql_publicaciones = "SELECT * FROM publicaciones";
+   $sql_publicaciones = "
+   SELECT p.*, u.username, u.foto_perfil 
+   FROM publicaciones p
+   JOIN usuarios u ON p.id_usuario = u.id_usuario
+   WHERE p.id_usuario = $id_usuario_sesion
+   OR p.id_usuario IN (SELECT id_siguiendo FROM seguidores WHERE id_seguidor = $id_usuario_sesion)
+   ORDER BY p.fecha_publicacion DESC";
+   
     $result_publicaciones = mysqli_query($con, $sql_publicaciones);
     while ($row_publicacion = mysqli_fetch_array($result_publicaciones)) {
         $id_publicacion = $row_publicacion['id_publicacion'];

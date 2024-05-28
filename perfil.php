@@ -30,33 +30,22 @@ if (is_array($id_usuario)) {
             <?php echo $row['username'] ?>
             <img width="150" height="180" src="<?php echo $row['foto_perfil']; ?>" alt="Foto de perfil">
             <a href="editar_perfil.php?id_usuario=<?php echo $row['id_usuario']?>">Editar</a>
-
-            <?php
-            // Verificar si el usuario actual sigue a este usuario
-            $is_following = false;
-            $sql_check_follow = "SELECT * FROM seguidores WHERE id_seguidor = '$id_usuario' AND id_siguiendo = '$row[id_usuario]'";
-            $result_check_follow = mysqli_query($con, $sql_check_follow);
-            if (mysqli_num_rows($result_check_follow) > 0) {
-                $is_following = true;
-            }
-            ?>
-            <button class="follow-btn" data-id-siguiendo="<?php echo $row['id_usuario']; ?>">
-                <?php echo $is_following ? 'Dejar de seguir' : 'Seguir'; ?>
-            </button>
         </div>
     <?php       
     }
     ?>
     <hr>
+
     <a href="explorar.php">Explorar</a>
     <div class="seguidores">
         <h3>Seguidores</h3>
         <?php
-        $sql_seguidores = "SELECT u.username, u.foto_perfil FROM seguidores s JOIN usuarios u ON s.id_seguidor = u.id_usuario WHERE s.id_siguiendo = $id_usuario";
-        $result_seguidores = mysqli_query($con, $sql_seguidores);
-        while ($row_seguidor = mysqli_fetch_array($result_seguidores)) {
-            echo "<div><img src='" . $row_seguidor['foto_perfil'] . "' width='50' height='50'> " . $row_seguidor['username'] . "</div>";
-        }
+        // Consulta para obtener el número de seguidores
+        $sql_count_seguidores = "SELECT COUNT(*) as total_seguidores FROM seguidores WHERE id_siguiendo = $id_usuario";
+        $result_count_seguidores = mysqli_query($con, $sql_count_seguidores);
+        $row_count_seguidores = mysqli_fetch_assoc($result_count_seguidores);
+        $total_seguidores = $row_count_seguidores['total_seguidores'];
+        echo "<a href='cantidad_seguidores.php'>Total de seguidores: $total_seguidores</a>";
         ?>
     </div>
 
@@ -64,11 +53,12 @@ if (is_array($id_usuario)) {
     <div class="seguidos">
         <h3>Seguidos</h3>
         <?php
-        $sql_seguidos = "SELECT u.username, u.foto_perfil FROM seguidores s JOIN usuarios u ON s.id_siguiendo = u.id_usuario WHERE s.id_seguidor = $id_usuario";
-        $result_seguidos = mysqli_query($con, $sql_seguidos);
-        while ($row_seguido = mysqli_fetch_array($result_seguidos)) {
-            echo "<div><img src='" . $row_seguido['foto_perfil'] . "' width='50' height='50'> " . $row_seguido['username'] . "</div>";
-        }
+        // Consulta para obtener el número de seguidos
+        $sql_count_seguidos = "SELECT COUNT(*) as total_seguidos FROM seguidores WHERE id_seguidor = $id_usuario";
+        $result_count_seguidos = mysqli_query($con, $sql_count_seguidos);
+        $row_count_seguidos = mysqli_fetch_assoc($result_count_seguidos);
+        $total_seguidos = $row_count_seguidos['total_seguidos'];
+        echo "<a href='cantidad_seguidos.php'>Total de seguidos: $total_seguidos</a>";
         ?>
     </div>
     <hr>

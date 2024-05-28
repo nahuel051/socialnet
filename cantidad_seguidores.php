@@ -1,0 +1,37 @@
+<?php 
+include('conexion.php');
+session_start();
+if (!isset($_SESSION['registrar'])) {
+    header('Location: login.html');
+    exit();
+}
+$id_usuario = $_SESSION['registrar'];
+if (is_array($id_usuario)) {
+    $id_usuario = $id_usuario['id_usuario'];
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<?php include('lateral.php') ?>
+<div class="seguidores">
+        <h3>Seguidores</h3>
+        <?php
+        $sql_seguidores = "SELECT u.username, u.foto_perfil FROM seguidores s JOIN usuarios u ON s.id_seguidor = u.id_usuario WHERE s.id_siguiendo = $id_usuario";
+        $result_seguidores = mysqli_query($con, $sql_seguidores);
+        while ($row_seguidor = mysqli_fetch_array($result_seguidores)) {
+            echo "<div><img src='" . $row_seguidor['foto_perfil'] . "' width='50' height='50'> " . $row_seguidor['username'] . "</div>";
+        }
+        ?>
+        
+    </div>
+</body>
+</html>
