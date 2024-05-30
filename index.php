@@ -40,6 +40,7 @@ if (is_array($id_usuario_sesion)) {
         $ya_le_gusta = mysqli_num_rows($result_check_like) > 0;
     ?>
     <div class="content-post">
+        <h2><?php echo $row_publicacion['username'] ?></h2>
         <img width="150" height="180" src="<?php echo $row_publicacion['imagen']; ?>" alt="Publicacion">
         <?php echo $row_publicacion['descripcion'] ?>
         <div class="comentario">

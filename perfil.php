@@ -63,7 +63,7 @@ if (is_array($id_usuario)) {
     </div>
     <hr>
     <?php 
-    $sql_publicaciones = "SELECT * FROM publicaciones WHERE id_usuario = $id_usuario";
+    $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario";
     $result_publicaciones = mysqli_query($con, $sql_publicaciones);
     while ($row_publicacion = mysqli_fetch_array($result_publicaciones)) {
         $id_publicacion = $row_publicacion['id_publicacion'];
@@ -74,6 +74,7 @@ if (is_array($id_usuario)) {
         $ya_le_gusta = mysqli_num_rows($result_check_like) > 0;
     ?>
     <div class="content-post">
+        <h2><?php echo $row_publicacion['username'] ?></h2>
         <img width="150" height="180" src="<?php echo $row_publicacion['imagen']; ?>" alt="Publicacion">
         <?php echo $row_publicacion['descripcion'] ?>
         <div class="comentario">
