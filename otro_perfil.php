@@ -5,9 +5,17 @@ if (!isset($_SESSION['registrar'])) {
     header('Location: login.html');
     exit();
 }
-$id_usuario_sesion = $_SESSION['registrar']; // El ID del usuario que ha iniciado sesión
+$id_usuario_sesion = $_SESSION['registrar'];
 if (is_array($id_usuario_sesion)) {
-    $id_usuario_sesion = $id_usuario_sesion['id_usuario']; // Ajusta esto según tu estructura de sesión
+    $id_usuario_sesion = $id_usuario_sesion['id_usuario'];
+}
+
+if(isset($_GET['id_usuario'])){
+    $id_usuario = $_GET['id_usuario'];
+} else {
+    // Redireccionar a un lugar adecuado si no se proporciona un id de usuario
+    header('Location: index.php');
+    exit();
 }
 ?>
 
@@ -16,33 +24,76 @@ if (is_array($id_usuario_sesion)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Perfil</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <?php include('lateral.php')?>
+    <?php include('lateral.php') ?>
     <?php 
-   $sql_publicaciones = "
-   SELECT p.*, u.username, u.foto_perfil 
-   FROM publicaciones p
-   JOIN usuarios u ON p.id_usuario = u.id_usuario
-   WHERE p.id_usuario = $id_usuario_sesion
-   OR p.id_usuario IN (SELECT id_siguiendo FROM seguidores WHERE id_seguidor = $id_usuario_sesion)
-   ORDER BY p.fecha_publicacion DESC";
-   
+    $sql = "SELECT * FROM usuarios WHERE id_usuario = $id_usuario";
+    $result = mysqli_query($con, $sql);
+    while($row = mysqli_fetch_array($result)){
+    ?>
+        <div class="content-perfil">
+            <?php echo $row['username'] ?>
+            <img width="150" height="180" src="<?php echo $row['foto_perfil']; ?>" alt="Foto de perfil">
+            <?php if ($id_usuario == $id_usuario_sesion) { ?>
+                <a href="editar_perfil.php?id_usuario=<?php echo $row['id_usuario']?>">Editar</a>
+            <?php } else { ?>
+                <!-- Mostrar el botón de seguir o dejar de seguir solo si no es el propio perfil -->
+                <div class="usuario">
+                    <?php
+                    $sql_check_follow = "SELECT * FROM seguidores WHERE id_seguidor = $id_usuario_sesion AND id_siguiendo = $id_usuario";
+                    $result_check_follow = mysqli_query($con, $sql_check_follow);
+                    $is_following = mysqli_num_rows($result_check_follow) > 0;
+                    ?>
+                    <button class="follow-btn" data-id-siguiendo="<?php echo $id_usuario; ?>">
+                        <?php echo $is_following ? 'Dejar de seguir' : 'Seguir'; ?>
+                    </button>
+                </div>
+            <?php } ?>
+        </div>
+    <?php       
+    }
+    ?>
+    <hr>
+
+    <a href="explorar.php">Explorar</a>
+    <div class="seguidores">
+        <h3>Seguidores</h3>
+        <?php
+        $sql_count_seguidores = "SELECT COUNT(*) as total_seguidores FROM seguidores WHERE id_siguiendo = $id_usuario";
+        $result_count_seguidores = mysqli_query($con, $sql_count_seguidores);
+        $row_count_seguidores = mysqli_fetch_assoc($result_count_seguidores);
+        $total_seguidores = $row_count_seguidores['total_seguidores'];
+        echo "<a href='cantidad_seguidores.php?id_usuario=$id_usuario'>Total de seguidores: $total_seguidores</a>";
+        ?>
+    </div>
+
+    <hr>
+    <div class="seguidos">
+        <h3>Seguidos</h3>
+        <?php
+        $sql_count_seguidos = "SELECT COUNT(*) as total_seguidos FROM seguidores WHERE id_seguidor = $id_usuario";
+        $result_count_seguidos = mysqli_query($con, $sql_count_seguidos);
+        $row_count_seguidos = mysqli_fetch_assoc($result_count_seguidos);
+        $total_seguidos = $row_count_seguidos['total_seguidos'];
+        echo "<a href='cantidad_seguidos.php?id_usuario=$id_usuario'>Total de seguidos: $total_seguidos</a>";
+        ?>
+    </div>
+    <hr>
+    <?php 
+    $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario";
     $result_publicaciones = mysqli_query($con, $sql_publicaciones);
     while ($row_publicacion = mysqli_fetch_array($result_publicaciones)) {
         $id_publicacion = $row_publicacion['id_publicacion'];
 
-        // Verificar si el usuario ya le ha dado "Me gusta" a esta publicación
         $sql_check_like = "SELECT * FROM megusta WHERE id_publicacion = '$id_publicacion' AND id_usuario = '$id_usuario_sesion'";
         $result_check_like = mysqli_query($con, $sql_check_like);
         $ya_le_gusta = mysqli_num_rows($result_check_like) > 0;
     ?>
     <div class="content-post">
-        <a href="<?php echo $row_publicacion['id_usuario'] == $id_usuario_sesion ? 'perfil.php' : 'otro_perfil.php?id_usuario=' . $row_publicacion['id_usuario']; ?>">
-        <?php echo $row_publicacion['username'] ?>
-        </a>
+        <h2><?php echo $row_publicacion['username'] ?></h2>
         <img width="150" height="180" src="<?php echo $row_publicacion['imagen']; ?>" alt="Publicacion">
         <?php echo $row_publicacion['descripcion'] ?>
         <div class="comentario">
@@ -82,6 +133,7 @@ if (is_array($id_usuario_sesion)) {
     <?php
     }
     ?>
+
     <script>
         $(document).ready(function() {
             $('.comentar-form').on('submit', function(event) {
@@ -137,26 +189,52 @@ if (is_array($id_usuario_sesion)) {
                     }
                 });
             });
-        // Manejar eliminación de comentarios
-        $(document).on('click', '.delete-comentario', function() {
-            var idComentario = $(this).data('id-comentario');
-            var comentarioElement = $(this).closest('p');
+            
+            // Manejar eliminación de comentarios
+            $(document).on('click', '.delete-comentario', function() {
+                var idComentario = $(this).data('id-comentario');
+                var comentarioElement = $(this).closest('p');
 
-            $.ajax({
-                type: 'POST',
-                url: 'delete-comentario.php',
-                data: { id_comentario: idComentario },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    if (data.success) {
-                        comentarioElement.remove();
-                    } else {
-                        alert(data.error);
+                $.ajax({
+                    type: 'POST',
+                    url: 'delete-comentario.php',
+                    data: { id_comentario: idComentario },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.success) {
+                            comentarioElement.remove();
+                        } else {
+                            alert(data.error);
+                        }
                     }
-                }
+                });
+            });
+
+            // Manejar seguimiento de usuarios
+            $('.follow-btn').on('click', function() {
+                var button = $(this);
+                var id_siguiendo = button.data('id-siguiendo');
+                var action = button.text().trim() === 'Seguir' ? 'seguir' : 'dejar_de_seguir';
+
+                $.ajax({
+                    type: 'POST',
+                    url: action + '.php',
+                    data: { id_siguiendo: id_siguiendo },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.success) {
+                            if (action === 'seguir') {
+                                button.text('Dejar de seguir');
+                            } else {
+                                button.text('Seguir');
+                            }
+                        } else {
+                            alert(data.error);
+                        }
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
