@@ -81,9 +81,10 @@ if (is_array($id_usuario_sesion)) {
                 $total_like = $row_like['total_megusta'];
             }
             ?>
-            <a href="cantidad_like.php">a <?php echo $total_like ?> les gusta</a>
+            <a href="cantidad_like.php?id_publicacion=<?php echo $id_publicacion; ?>">a <?php echo $total_like; ?> les gusta</a>
             <input type="checkbox" class="like-checkbox" data-id-publicacion="<?php echo $row_publicacion['id_publicacion']; ?>" <?php echo $ya_le_gusta ? 'checked' : ''; ?>>
         </div>
+
     </div>
     <?php
     }
