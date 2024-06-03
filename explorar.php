@@ -43,7 +43,7 @@ if (is_array($id_usuario)) {
         ?>
         <div class="usuario">
             <img width="50" height="50" src="<?php echo $row_explorar['foto_perfil']; ?>" alt="Foto de perfil">
-            <strong><?php echo $row_explorar['username']; ?></strong>
+            <a href="otro_perfil.php?id_usuario=<?php echo $row_explorar['id_usuario']?>"><?php echo $row_explorar['username']; ?></a>
             <button class="follow-btn" data-id-siguiendo="<?php echo $row_explorar['id_usuario']; ?>">
                 <?php echo $is_following ? 'Dejar de seguir' : 'Seguir'; ?>
             </button>

@@ -54,17 +54,23 @@ if (is_array($id_usuario_sesion)) {
             <div class="mensaje_comentario"></div>
         </div>
         <div class="content-comentario" id="comentarios-<?php echo $row_publicacion['id_publicacion']; ?>">
-        <?php 
-            $sql_comentarios = "SELECT c.id_comentario, c.comentario, u.username, c.id_usuario FROM comentarios c JOIN usuarios u ON c.id_usuario = u.id_usuario WHERE c.id_publicacion = $id_publicacion ORDER BY c.fecha_comentario ASC";
+                <?php 
+            $sql_comentarios = "SELECT c.id_comentario, c.comentario, u.username, c.id_usuario 
+                                FROM comentarios c 
+                                JOIN usuarios u ON c.id_usuario = u.id_usuario 
+                                WHERE c.id_publicacion = $id_publicacion 
+                                ORDER BY c.fecha_comentario ASC";
             $result_comentarios = mysqli_query($con, $sql_comentarios);
             while ($row_comentario = mysqli_fetch_array($result_comentarios)) {
-                echo "<p><strong>" . $row_comentario['username'] . ":</strong> " . $row_comentario['comentario'];
+                $link = $row_comentario['id_usuario'] == $id_usuario_sesion ? 'perfil.php' : 'otro_perfil.php?id_usuario=' . $row_comentario['id_usuario'];
+                echo "<a href=\"$link\">" . $row_comentario['username'] . ": </a> " . $row_comentario['comentario'];
                 if ($row_comentario['id_usuario'] == $id_usuario_sesion) {
                     echo " <button class='delete-comentario' data-id-comentario='" . $row_comentario['id_comentario'] . "'>Eliminar</button>";
                 }
-                echo "</p>";
+                echo "<br>";
             }
-        ?>
+            ?>
+
         </div>
         <div class="like">
             <?php

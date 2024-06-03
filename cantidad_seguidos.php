@@ -27,18 +27,17 @@ if (is_array($id_usuario)) {
     <?php
     $sql_seguidos = "SELECT u.id_usuario, u.username, u.foto_perfil FROM seguidores s JOIN usuarios u ON s.id_siguiendo = u.id_usuario WHERE s.id_seguidor = $id_usuario";
     $result_seguidos = mysqli_query($con, $sql_seguidos);
-    while ($row_seguido = mysqli_fetch_array($result_seguidos)) {
+    while ($row_seguido = mysqli_fetch_array($result_seguidos)) { 
         $is_following = true; // Ya sigues a estos usuarios, así que establecer a true
-        echo "<div>
-                <img src='" . $row_seguido['foto_perfil'] . "' width='50' height='50'> 
-                " . $row_seguido['username'] . "
-                <div class='usuario'>
-                    <button class='follow-btn' data-id-siguiendo='" . $row_seguido['id_usuario'] . "'>
-                        " . ($is_following ? 'Dejar de seguir' : 'Seguir') . "
-                    </button>
-                </div>
-              </div>";
-    }
+    ?>
+        <div class="usuario">
+        <img width="50" height="50" src="<?php echo $row_seguido['foto_perfil']; ?>" alt="Foto de perfil">
+        <a href="otro_perfil.php?id_usuario=<?php echo $row_seguido['id_usuario']?>"><?php echo $row_seguido['username']; ?></a>
+        <button class="follow-btn" data-id-siguiendo="<?php echo $row_seguido['id_usuario']; ?>">
+            <?php echo $is_following ? 'Dejar de seguir' : 'Seguir'; ?>
+        </button>
+        </div>
+   <?php }
     ?>
 </div>
 

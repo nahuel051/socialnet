@@ -34,7 +34,9 @@ if(isset($_GET['id_usuario'])){
     $sql_seguidos = "SELECT u.id_usuario, u.username, u.foto_perfil FROM seguidores s JOIN usuarios u ON s.id_siguiendo = u.id_usuario WHERE s.id_seguidor = $id_usuario";
     $result_seguidos = mysqli_query($con, $sql_seguidos);
     while ($row_seguido = mysqli_fetch_array($result_seguidos)) {
-        echo "<div><img src='" . $row_seguido['foto_perfil'] . "' width='50' height='50'> " . $row_seguido['username'] . "</div>";
+        $link = $row_seguido['id_usuario'] == $id_usuario_sesion ? 'perfil.php' : 'otro_perfil.php?id_usuario=' . $row_seguido['id_usuario'];
+        echo "<div><img src='" . $row_seguido['foto_perfil'] . "' width='50' height='50'> " .
+        "<a href='" . $link . "'>" . $row_seguido['username'] . "</a></div>";
     }
     ?>
 </div>
