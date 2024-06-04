@@ -75,6 +75,8 @@ if (is_array($id_usuario)) {
     ?>
     <div class="content-post">
         <h2><?php echo $row_publicacion['username'] ?></h2>
+        <a href="delete.php?id_publicacion=<?php echo $row_publicacion['id_publicacion'] ?>">Eliminar</a>
+        <a href="editar_publicacion.php?id_publicacion=<?php echo $row_publicacion['id_publicacion']?>">Editar</a>
         <img width="150" height="180" src="<?php echo $row_publicacion['imagen']; ?>" alt="Publicacion">
         <?php echo $row_publicacion['descripcion'] ?>
         <div class="comentario">

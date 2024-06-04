@@ -75,7 +75,7 @@ if(isset($_POST['guardar'])){
     <input type="text" name="username" value="<?php echo $username?>">
     <input type="file" name="foto_perfil"> 
     <img width="150" height="180" src="<?php echo $ruta_img; ?>" alt="Foto de perfil">
-    <input type="submit" value="Guardar Cambios" name="guardar">
+    <input type="submit" value="Guardar cambios" name="guardar">
     <?php echo $mensaje ?> 
 </form>
 </body>
