@@ -9,7 +9,6 @@ $id_usuario = $_SESSION['registrar'];
 if (is_array($id_usuario)) {
     $id_usuario = $id_usuario['id_usuario'];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,33 +23,36 @@ if (is_array($id_usuario)) {
 
     <div class="explorar-usuarios">
         <h3>Explorar Usuarios</h3>
-        <?php
-        // Seleccionar usuarios que no están siendo seguidos por el usuario actual
-        $sql_explorar = "
-            SELECT u.id_usuario, u.username, u.foto_perfil 
-            FROM usuarios u 
-            WHERE u.id_usuario != '$id_usuario' 
-              AND u.id_usuario NOT IN (SELECT id_siguiendo FROM seguidores WHERE id_seguidor = '$id_usuario')
-        ";
-        $result_explorar = mysqli_query($con, $sql_explorar);
-        while ($row_explorar = mysqli_fetch_array($result_explorar)) {
-            $is_following = false;
-            $sql_check_follow = "SELECT * FROM seguidores WHERE id_seguidor = '$id_usuario' AND id_siguiendo = '$row_explorar[id_usuario]'";
-            $result_check_follow = mysqli_query($con, $sql_check_follow);
-            if (mysqli_num_rows($result_check_follow) > 0) {
-                $is_following = true;
+        <input type="text" id="buscar-usuario" placeholder="Buscar usuario...">
+        <div id="resultado-busqueda">
+            <?php
+            // Seleccionar usuarios que no están siendo seguidos por el usuario actual
+            $sql_explorar = "
+                SELECT u.id_usuario, u.username, u.foto_perfil 
+                FROM usuarios u 
+                WHERE u.id_usuario != '$id_usuario' 
+                  AND u.id_usuario NOT IN (SELECT id_siguiendo FROM seguidores WHERE id_seguidor = '$id_usuario')
+            ";
+            $result_explorar = mysqli_query($con, $sql_explorar);
+            while ($row_explorar = mysqli_fetch_array($result_explorar)) {
+                $is_following = false;
+                $sql_check_follow = "SELECT * FROM seguidores WHERE id_seguidor = '$id_usuario' AND id_siguiendo = '$row_explorar[id_usuario]'";
+                $result_check_follow = mysqli_query($con, $sql_check_follow);
+                if (mysqli_num_rows($result_check_follow) > 0) {
+                    $is_following = true;
+                }
+            ?>
+            <div class="usuario">
+                <img width="50" height="50" src="<?php echo $row_explorar['foto_perfil']; ?>" alt="Foto de perfil">
+                <a href="otro_perfil.php?id_usuario=<?php echo $row_explorar['id_usuario']?>"><?php echo $row_explorar['username']; ?></a>
+                <button class="follow-btn" data-id-siguiendo="<?php echo $row_explorar['id_usuario']; ?>">
+                    <?php echo $is_following ? 'Dejar de seguir' : 'Seguir'; ?>
+                </button>
+            </div>
+            <?php
             }
-        ?>
-        <div class="usuario">
-            <img width="50" height="50" src="<?php echo $row_explorar['foto_perfil']; ?>" alt="Foto de perfil">
-            <a href="otro_perfil.php?id_usuario=<?php echo $row_explorar['id_usuario']?>"><?php echo $row_explorar['username']; ?></a>
-            <button class="follow-btn" data-id-siguiendo="<?php echo $row_explorar['id_usuario']; ?>">
-                <?php echo $is_following ? 'Dejar de seguir' : 'Seguir'; ?>
-            </button>
+            ?>
         </div>
-        <?php
-        }
-        ?>
     </div>
 
     <script>
@@ -76,6 +78,19 @@ if (is_array($id_usuario)) {
                         } else {
                             alert(data.error);
                         }
+                    }
+                });
+            });
+
+            // Manejar búsqueda de usuarios
+            $('#buscar-usuario').on('keyup', function() {
+                var terminoBusqueda = $(this).val().trim();
+                $.ajax({
+                    type: 'GET',
+                    url: 'buscar_usuarios.php',
+                    data: { query: terminoBusqueda },
+                    success: function(response) {
+                        $('#resultado-busqueda').html(response);
                     }
                 });
             });
