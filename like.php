@@ -1,10 +1,9 @@
 <?php
 include('conexion.php');
 session_start();
-$mensaje_like = "";
-if (!isset($_SESSION['registrar'])) { 
+if (!isset($_SESSION['registrar'])) {
     header('Location: login.html');
-    exit(); 
+    exit();
 }
 
 $id_usuario = $_SESSION['registrar'];
@@ -26,10 +25,13 @@ if (isset($_POST['like_action'])) {
                 $sql = "INSERT INTO megusta (id_publicacion, id_usuario) VALUES ('$id_publicacion', '$id_usuario')";
                 $result = mysqli_query($con, $sql);
                 if ($result) {
+                    // Insertar notificación
+                    $sql_notificacion = "INSERT INTO notificaciones (id_usuario, type, object_id) VALUES ((SELECT id_usuario FROM publicaciones WHERE id_publicacion = '$id_publicacion'), 'like', '$id_publicacion')";
+                    mysqli_query($con, $sql_notificacion);
                     echo json_encode(array('success' => true));
                     exit();
-                } 
-            } 
+                }
+            }
         } elseif ($like_action === 'remove') {
             // Eliminar Me gusta
             $sql = "DELETE FROM megusta WHERE id_publicacion = '$id_publicacion' AND id_usuario = '$id_usuario'";
