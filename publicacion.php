@@ -31,11 +31,12 @@ $publicacion = mysqli_fetch_assoc($result_publicacion);
     <?php if ($publicacion): ?>
         <div class="publicacion">
             <p><strong><?php echo $publicacion['username']; ?></strong></p>
-            <p><?php echo $publicacion['descripcion']; ?></p>
+            <p><small><?php echo $publicacion['fecha_publicacion']; ?></small></p>
             <?php if ($publicacion['imagen']): ?>
                 <img src="<?php echo $publicacion['imagen']; ?>" alt="Publicación">
             <?php endif; ?>
-            <p><small><?php echo $publicacion['fecha_publicacion']; ?></small></p>
+            <p><?php echo $publicacion['descripcion']; ?></p>
+            
         </div>
     <?php else: ?>
         <p>Publicación no encontrada.</p>
