@@ -46,13 +46,13 @@ $result_notificaciones = mysqli_query($con, $sql_notificaciones);
                 echo "<div class='notificacion'>";
                 switch ($type) {
                     case 'like':
-                        echo "<p>$username le dio Me gusta a tu <a href='publicacion.php?id_publicacion=$id_publicacion'>publicación</a></p>";
+                        echo "<p>$username le dio Me gusta a tu <a href='perfil.php'>publicación</a></p>";
                         break;
                     case 'follow':
                         echo "<p>$username te ha seguido</p>";
                         break;
                     case 'comment':
-                        echo "<p>$username comentó en tu <a href='publicacion.php?id_publicacion=$id_publicacion'>publicación</a> $comentario</p>";
+                        echo "<p>$username comentó en tu <a href='perfil.php'>publicación</a> $comentario</p>";
                         break;
                 }
                 echo "<p><small>$fecha</small></p>";
