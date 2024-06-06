@@ -9,13 +9,18 @@
         $(document).ready(function(){
             $("#formulario").submit(function(event){
                 event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
-                
-                var formData = new FormData(this); // Crear un objeto FormData con el formulario
-
+                // Crear un objeto FormData con el formulario
+                //Cuando se envia un formulario puede ser JSOn o texto plano
+                //FormData es una API que permite construir una serie de valores
+                //representando los campos del formularios.
+                var formData = new FormData(this); 
                 $.ajax({
                     type: "POST",
                     url: "registrar.php",
                     data: formData,
+                    //con contentType y processData se asegura que Jquery no modifie los datos
+                    //al enviarlo al sevidor, cuando se envian datos binarios como imagenes se utiliza FormData
+                    //ya que jQuery intentaria serializarlos si no estan en "false"
                     contentType: false, // No establecer el tipo de contenido
                     processData: false, // No procesar los datos de la forma predeterminada
                     success: function(response){

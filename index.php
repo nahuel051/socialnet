@@ -5,9 +5,11 @@ if (!isset($_SESSION['registrar'])) {
     header('Location: login.html');
     exit();
 }
-$id_usuario_sesion = $_SESSION['registrar']; // El ID del usuario que ha iniciado sesión
+//Obtiene el id del usuario iniciado sesión
+$id_usuario_sesion = $_SESSION['registrar'];
+//Verifica si is_array($id_usuario_sesion) es un array
 if (is_array($id_usuario_sesion)) {
-    $id_usuario_sesion = $id_usuario_sesion['id_usuario']; // Ajusta esto según tu estructura de sesión
+    $id_usuario_sesion = $id_usuario_sesion['id_usuario'];
 }
 ?>
 
