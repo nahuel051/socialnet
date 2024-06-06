@@ -62,3 +62,6 @@ CREATE TABLE notificaciones (
 
 CONSULTAS EXTRAS:
 ALTER TABLE megusta ADD CONSTRAINT unique_like UNIQUE (id_publicacion, id_usuario);
+ALTER TABLE notificaciones ADD actor_id INT;
+ALTER TABLE notificaciones ADD FOREIGN KEY (actor_id) REFERENCES usuarios(id_usuario);
+

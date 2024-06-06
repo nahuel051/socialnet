@@ -28,10 +28,13 @@ if ($_POST) {
             $username = $row_usuario['username'];
 
             // Insertar notificación
-            $sql_notificacion = "INSERT INTO notificaciones (id_usuario, type, object_id) VALUES ((SELECT id_usuario FROM publicaciones WHERE id_publicacion = '$id_publicacion'), 'comment', '$id_publicacion')";
+            $sql_notificacion = "INSERT INTO notificaciones (id_usuario, actor_id, type, object_id) VALUES (
+                (SELECT id_usuario FROM publicaciones WHERE id_publicacion = '$id_publicacion'), 
+                '$id_usuario', 
+                'comment', 
+                '$id_publicacion')";
             mysqli_query($con, $sql_notificacion);
 
-            // Devolver respuesta en formato JSON
             echo json_encode(['success' => true, 'username' => $username, 'comentario' => $comentario]);
         } else {
             echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
@@ -40,4 +43,5 @@ if ($_POST) {
         echo json_encode(['success' => false, 'error' => 'Ingrese comentario']);
     }
 }
+
 ?>
