@@ -5,9 +5,8 @@ if (!isset($_SESSION['registrar'])) {
     header('Location: login.html');
     exit();
 }
-//Obtiene el id del usuario iniciado sesión
+
 $id_usuario_sesion = $_SESSION['registrar'];
-//Verifica si is_array($id_usuario_sesion) es un array
 if (is_array($id_usuario_sesion)) {
     $id_usuario_sesion = $id_usuario_sesion['id_usuario'];
 }
@@ -65,14 +64,15 @@ if (is_array($id_usuario_sesion)) {
             $result_comentarios = mysqli_query($con, $sql_comentarios);
             while ($row_comentario = mysqli_fetch_array($result_comentarios)) {
                 $link = $row_comentario['id_usuario'] == $id_usuario_sesion ? 'perfil.php' : 'otro_perfil.php?id_usuario=' . $row_comentario['id_usuario'];
+                echo "<div data-id-comentario='" . $row_comentario['id_comentario'] . "'>"; // Encapsular el comentario en un div
                 echo "<a href=\"$link\">" . $row_comentario['username'] . ": </a> " . $row_comentario['comentario'];
                 if ($row_comentario['id_usuario'] == $id_usuario_sesion) {
                     echo " <button class='delete-comentario' data-id-comentario='" . $row_comentario['id_comentario'] . "'>Eliminar</button>";
                 }
                 echo "<br>";
+                echo "</div>"; // Cerrar el div encapsulador
             }
             ?>
-
         </div>
         <div class="like">
             <?php
@@ -86,7 +86,6 @@ if (is_array($id_usuario_sesion)) {
             <a href="cantidad_like.php?id_publicacion=<?php echo $id_publicacion; ?>">a <?php echo $total_like; ?> les gusta</a>
             <input type="checkbox" class="like-checkbox" data-id-publicacion="<?php echo $row_publicacion['id_publicacion']; ?>" <?php echo $ya_le_gusta ? 'checked' : ''; ?>>
         </div>
-
     </div>
     <?php
     }
@@ -146,26 +145,27 @@ if (is_array($id_usuario_sesion)) {
                     }
                 });
             });
-        // Manejar eliminación de comentarios
-        $(document).on('click', '.delete-comentario', function() {
-            var idComentario = $(this).data('id-comentario');
-            var comentarioElement = $(this).closest('p');
 
-            $.ajax({
-                type: 'POST',
-                url: 'delete-comentario.php',
-                data: { id_comentario: idComentario },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    if (data.success) {
-                        comentarioElement.remove();
-                    } else {
-                        alert(data.error);
+            // Manejar eliminación de comentarios
+            $(document).on('click', '.delete-comentario', function() {
+                var idComentario = $(this).data('id-comentario');
+                var comentarioElement = $(this).closest('div[data-id-comentario]');
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'delete-comentario.php',
+                    data: { id_comentario: idComentario },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.success) {
+                            comentarioElement.remove();
+                        } else {
+                            alert(data.error);
+                        }
                     }
-                }
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
