@@ -106,7 +106,11 @@ if (is_array($id_usuario_sesion)) {
                     success: function(response) {
                         if (response.success) {
                             var id_publicacion = form.find('input[name="id_publicacion"]').val();
-                            $('#comentarios-' + id_publicacion).append('<p><strong>' + response.username + ':</strong> ' + response.comentario + '</p>');
+                            var nuevoComentario = '<div data-id-comentario="' + response.id_comentario + '">' +
+                                                  '<a href="perfil.php">' + response.username + ': </a>' + response.comentario +
+                                                  ' <button class="delete-comentario" data-id-comentario="' + response.id_comentario + '">Eliminar</button>' +
+                                                  '<br></div>';
+                            $('#comentarios-' + id_publicacion).append(nuevoComentario);
                             form.find('textarea[name="comentario"]').val('');
                             mensajeComentario.html(''); // Limpiar mensaje de error
                         } else {

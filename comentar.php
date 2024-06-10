@@ -7,41 +7,28 @@ if (!isset($_SESSION['registrar'])) {
     exit();
 }
 
-$id_usuario = $_SESSION['registrar'];
-if (is_array($id_usuario)) {
-    $id_usuario = $id_usuario['id_usuario'];
+$id_usuario_sesion = $_SESSION['registrar'];
+if (is_array($id_usuario_sesion)) {
+    $id_usuario_sesion = $id_usuario_sesion['id_usuario'];
 }
 
 if ($_POST) {
-    $comentario = trim($_POST['comentario']);
+    $comentario = $_POST['comentario'];
     $id_publicacion = $_POST['id_publicacion'];
+    $fecha_comentario = date('Y-m-d H:i:s');
 
-    if (!empty($comentario) && !empty($id_publicacion) && !empty($id_usuario)) {
-        $sql = "INSERT INTO comentarios (id_publicacion, id_usuario, comentario) VALUES ('$id_publicacion', '$id_usuario', '$comentario')";
-        $result = mysqli_query($con, $sql);
+    $sql = "INSERT INTO comentarios (comentario, id_publicacion, id_usuario, fecha_comentario) VALUES ('$comentario', '$id_publicacion', '$id_usuario_sesion', '$fecha_comentario')";
 
-        if ($result) {
-            // Obtener el nombre de usuario
-            $sql_usuario = "SELECT username FROM usuarios WHERE id_usuario = '$id_usuario'";
-            $result_usuario = mysqli_query($con, $sql_usuario);
-            $row_usuario = mysqli_fetch_assoc($result_usuario);
-            $username = $row_usuario['username'];
-
-            // Insertar notificación
-            $sql_notificacion = "INSERT INTO notificaciones (id_usuario, actor_id, type, object_id) VALUES (
-                (SELECT id_usuario FROM publicaciones WHERE id_publicacion = '$id_publicacion'), 
-                '$id_usuario', 
-                'comment', 
-                '$id_publicacion')";
-            mysqli_query($con, $sql_notificacion);
-
-            echo json_encode(['success' => true, 'username' => $username, 'comentario' => $comentario]);
-        } else {
-            echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
-        }
+    if (mysqli_query($con, $sql)) {
+        $id_comentario = mysqli_insert_id($con);
+        $sql_usuario = "SELECT username FROM usuarios WHERE id_usuario = '$id_usuario_sesion'";
+        $result_usuario = mysqli_query($con, $sql_usuario);
+        $row_usuario = mysqli_fetch_assoc($result_usuario);
+        $username = $row_usuario['username'];
+        
+        echo json_encode(['success' => true, 'id_comentario' => $id_comentario, 'username' => $username, 'comentario' => $comentario]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Ingrese comentario']);
+        echo json_encode(['success' => false, 'error' => 'Error al guardar el comentario.']);
     }
 }
-
 ?>
