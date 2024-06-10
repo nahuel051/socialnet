@@ -90,86 +90,87 @@ if (is_array($id_usuario_sesion)) {
     <?php
     }
     ?>
-    <script>
-        $(document).ready(function() {
-            $('.comentar-form').on('submit', function(event) {
-                event.preventDefault();
-                var form = $(this);
-                var formData = form.serialize();
-                var mensajeComentario = form.next('.mensaje_comentario'); // Selecciona el contenedor de mensaje de error relativo al formulario
+   <script>
+    $(document).ready(function() {
+        $('.comentar-form').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var formData = form.serialize();
+            var mensajeComentario = form.next('.mensaje_comentario'); // Selecciona el contenedor de mensaje de error relativo al formulario
 
-                $.ajax({
-                    type: 'POST',
-                    url: 'comentar.php',
-                    data: formData,
-                    dataType: 'json', // Especificar que la respuesta es JSON
-                    success: function(response) {
-                        if (response.success) {
-                            var id_publicacion = form.find('input[name="id_publicacion"]').val();
-                            var nuevoComentario = '<div data-id-comentario="' + response.id_comentario + '">' +
-                                                  '<a href="perfil.php">' + response.username + ': </a>' + response.comentario +
-                                                  ' <button class="delete-comentario" data-id-comentario="' + response.id_comentario + '">Eliminar</button>' +
-                                                  '<br></div>';
-                            $('#comentarios-' + id_publicacion).append(nuevoComentario);
-                            form.find('textarea[name="comentario"]').val('');
-                            mensajeComentario.html(''); // Limpiar mensaje de error
-                        } else {
-                            mensajeComentario.html(response.error);
-                        }
+            $.ajax({
+                type: 'POST',
+                url: 'comentar.php',
+                data: formData,
+                dataType: 'json', // Especificar que la respuesta es JSON
+                success: function(response) {
+                    if (response.success) {
+                        var id_publicacion = form.find('input[name="id_publicacion"]').val();
+                        var nuevoComentario = '<div data-id-comentario="' + response.id_comentario + '">' +
+                                              '<a href="' + response.profile_link + '">' + response.username + ': </a>' + response.comentario +
+                                              ' <button class="delete-comentario" data-id-comentario="' + response.id_comentario + '">Eliminar</button>' +
+                                              '<br></div>';
+                        $('#comentarios-' + id_publicacion).append(nuevoComentario);
+                        form.find('textarea[name="comentario"]').val('');
+                        mensajeComentario.html(''); // Limpiar mensaje de error
+                    } else {
+                        mensajeComentario.html(response.error);
                     }
-                });
-            });
-
-            // Manejar evento de cambio en el checkbox de Me gusta
-            $(document).on('change', '.like-checkbox', function() {
-                var checkbox = $(this);
-                var idPublicacion = checkbox.data('id-publicacion');
-                var isChecked = checkbox.prop('checked');
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'like.php',
-                    data: {
-                        id_publicacion: idPublicacion,
-                        like_action: isChecked ? 'add' : 'remove' // Indicar si se agrega o se elimina el Me gusta
-                    },
-                    success: function(response) {
-                        // Actualizar la UI según sea necesario
-                        var totalLikesElement = checkbox.closest('.like').find('a');
-                        var totalLikesText = totalLikesElement.text();
-                        var totalLikes = parseInt(totalLikesText.match(/\d+/)[0]);
-
-                        if (isChecked) {
-                            // Me gusta agregado
-                            totalLikesElement.text('a ' + (totalLikes + 1) + ' les gusta');
-                        } else {
-                            // Me gusta eliminado
-                            totalLikesElement.text('a ' + (totalLikes - 1) + ' les gusta');
-                        }
-                    }
-                });
-            });
-
-            // Manejar eliminación de comentarios
-            $(document).on('click', '.delete-comentario', function() {
-                var idComentario = $(this).data('id-comentario');
-                var comentarioElement = $(this).closest('div[data-id-comentario]');
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'delete-comentario.php',
-                    data: { id_comentario: idComentario },
-                    success: function(response) {
-                        var data = JSON.parse(response);
-                        if (data.success) {
-                            comentarioElement.remove();
-                        } else {
-                            alert(data.error);
-                        }
-                    }
-                });
+                }
             });
         });
-    </script>
+
+        // Manejar evento de cambio en el checkbox de Me gusta
+        $(document).on('change', '.like-checkbox', function() {
+            var checkbox = $(this);
+            var idPublicacion = checkbox.data('id-publicacion');
+            var isChecked = checkbox.prop('checked');
+
+            $.ajax({
+                type: 'POST',
+                url: 'like.php',
+                data: {
+                    id_publicacion: idPublicacion,
+                    like_action: isChecked ? 'add' : 'remove' // Indicar si se agrega o se elimina el Me gusta
+                },
+                success: function(response) {
+                    // Actualizar la UI según sea necesario
+                    var totalLikesElement = checkbox.closest('.like').find('a');
+                    var totalLikesText = totalLikesElement.text();
+                    var totalLikes = parseInt(totalLikesText.match(/\d+/)[0]);
+
+                    if (isChecked) {
+                        // Me gusta agregado
+                        totalLikesElement.text('a ' + (totalLikes + 1) + ' les gusta');
+                    } else {
+                        // Me gusta eliminado
+                        totalLikesElement.text('a ' + (totalLikes - 1) + ' les gusta');
+                    }
+                }
+            });
+        });
+
+        // Manejar eliminación de comentarios
+        $(document).on('click', '.delete-comentario', function() {
+            var idComentario = $(this).data('id-comentario');
+            var comentarioElement = $(this).closest('div[data-id-comentario]');
+
+            $.ajax({
+                type: 'POST',
+                url: 'delete-comentario.php',
+                data: { id_comentario: idComentario },
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if (data.success) {
+                        comentarioElement.remove();
+                    } else {
+                        alert(data.error);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
