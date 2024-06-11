@@ -9,7 +9,7 @@ $mensaje = "";
 if($_POST){
     $imagen = $_FILES['imagen'];
     $descripcion = $_POST['descripcion'];
-    if(empty($imagen)){
+    if($imagen['error'] === UPLOAD_ERR_NO_FILE){
         $mensaje = "Agregar imagen o video!";
     }else{
          $nombre_img = $imagen['name'];

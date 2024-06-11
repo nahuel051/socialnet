@@ -13,6 +13,7 @@ if (is_array($id_usuario)) {
 }
 
 if ($_POST) {
+//Se recupera el ID del comentario enviado en la solicitud POST y se almacena en la variable $id_comentario.
     $id_comentario = $_POST['id_comentario'];
 
     // Verificar que el comentario pertenece al usuario actual
@@ -20,7 +21,8 @@ if ($_POST) {
     $result_verificar = mysqli_query($con, $sql_verificar);
     if ($result_verificar) {
         $row_verificar = mysqli_fetch_assoc($result_verificar);
-
+    // Se compara el ID del usuario asociado al comentario con el ID del usuario actual ($id_usuario).
+    // Si son iguales, significa que el usuario actual es el propietario del comentario y tiene permiso para eliminarlo.
         if ($row_verificar['id_usuario'] == $id_usuario) {
             $sql_eliminar = "DELETE FROM comentarios WHERE id_comentario = '$id_comentario'";
             if (mysqli_query($con, $sql_eliminar)) {

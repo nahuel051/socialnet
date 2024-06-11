@@ -9,19 +9,27 @@
         $(document).ready(function(){
             $("#formulario").submit(function(event){
                 event.preventDefault(); 
-                
-                var formData = new FormData(this); // Crear un objeto FormData con el formulario
+// Se crea un objeto FormData, para recopilar datos 
+// de un formulario, usando el formulario actual (this) como parámetro. 
+// Este objeto contendrá todos los datos del formulario, 
+// incluidos los archivos adjuntos.
+                var formData = new FormData(this); 
 
                 $.ajax({
                     type: "POST",
                     url: "publicar.php",
                     data: formData,
-                    contentType: false, // No establecer el tipo de contenido
-                    processData: false, // No procesar los datos de la forma predeterminada
+                    // No establecer el tipo de contenido automaticamente al enviar los datos
+                    //binarios (como archivos)
+                    contentType: false, 
+                    // No procesar los datos de la forma predeterminada
+                    //Es importante para cuando se envian datos binarios ya que no deben ser procesados
+                    processData: false, 
                     success: function(response){
                         if(response === "success"){
                             window.location.href = "index.php"; 
                         } else {
+                    //Se establece el contenido del elemento HTML con el ID mensaje con la respuesta del servidor
                             $("#mensaje").html(response); 
                         }
                     }
