@@ -63,7 +63,7 @@ if (is_array($id_usuario)) {
     </div>
     <hr>
     <?php 
-    $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario";
+    $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario ORDER BY p.fecha_publicacion DESC";;
     $result_publicaciones = mysqli_query($con, $sql_publicaciones);
     while ($row_publicacion = mysqli_fetch_array($result_publicaciones)) {
         $id_publicacion = $row_publicacion['id_publicacion'];
