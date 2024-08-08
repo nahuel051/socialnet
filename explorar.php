@@ -26,19 +26,27 @@ if (is_array($id_usuario)) {
         <input type="text" id="buscar-usuario" placeholder="Buscar usuario...">
         <div id="resultado-busqueda">
             <?php
-            // Seleccionar usuarios que no están siendo seguidos por el usuario actual
+            // USUARIOS QUE NO ESTEN SEGUIDOS POR EL USUARIO INCIADO
+            // WHERE u.id_usuario != '$id_usuario' con esta linea el usuario se excluye de la busqueda
+            //AND... asegura que no seleccione usuarios que ya son seguidos por el usuario inciado
             $sql_explorar = "
                 SELECT u.id_usuario, u.username, u.foto_perfil 
                 FROM usuarios u 
                 WHERE u.id_usuario != '$id_usuario' 
                   AND u.id_usuario NOT IN (SELECT id_siguiendo FROM seguidores WHERE id_seguidor = '$id_usuario')
             ";
+            //Obtiene una fila de resutados y se almacena en $result_explorar
             $result_explorar = mysqli_query($con, $sql_explorar);
+            //El bucle itera sobre cada fila de resultados de la consulta
             while ($row_explorar = mysqli_fetch_array($result_explorar)) {
+                //Inicializa la variable como false asumiendo que no sigue al usuario en la fila actual
                 $is_following = false;
+                //verifocar si $id_usuario sigue en la fila actual a $row_explorar['id_usuario']
                 $sql_check_follow = "SELECT * FROM seguidores WHERE id_seguidor = '$id_usuario' AND id_siguiendo = '$row_explorar[id_usuario]'";
                 $result_check_follow = mysqli_query($con, $sql_check_follow);
+                //Si la consulta devuelve mas de una fila siginifca que el usuario sigue al usuario en fila
                 if (mysqli_num_rows($result_check_follow) > 0) {
+                //por lo cual is following se establece como true 
                     $is_following = true;
                 }
             ?>
@@ -84,7 +92,11 @@ if (is_array($id_usuario)) {
 
             // Manejar búsqueda de usuarios
             $('#buscar-usuario').on('keyup', function() {
+            //obtiene el valor del campo de busqueda y elimina espacios en blanco al incio y al final
                 var terminoBusqueda = $(this).val().trim();
+               //Envia solicitud tipo get al archivo
+               //pasandole el termino de busqueda como parametro query
+               //En caso de exito acutaliza el contenido del elemento con el ID resultado-bsuqeda con la respuesta recibida
                 $.ajax({
                     type: 'GET',
                     url: 'buscar_usuarios.php',

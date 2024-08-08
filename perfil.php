@@ -22,6 +22,7 @@ if (is_array($id_usuario)) {
 <body>
     <?php include('lateral.php') ?>
     <?php 
+    //PERFIL DEL USUARIO INICIADO SESION
     $sql = "SELECT * FROM usuarios WHERE id_usuario = $id_usuario";
     $result = mysqli_query($con, $sql);
     while($row = mysqli_fetch_array($result)){
@@ -35,7 +36,7 @@ if (is_array($id_usuario)) {
     }
     ?>
     <hr>
-
+    <!-- SEGUIDOS Y SEGUIDORES -->
     <a href="explorar.php">Explorar</a>
     <div class="seguidores">
         <h3>Seguidores</h3>
@@ -43,6 +44,8 @@ if (is_array($id_usuario)) {
         // Consulta para obtener el número de seguidores
         $sql_count_seguidores = "SELECT COUNT(*) as total_seguidores FROM seguidores WHERE id_siguiendo = $id_usuario";
         $result_count_seguidores = mysqli_query($con, $sql_count_seguidores);
+        //convierte el resultado en un array asociativo, se extrae el valor de la columna
+        //total_seguidores y se almacena en variable $total_seguidores
         $row_count_seguidores = mysqli_fetch_assoc($result_count_seguidores);
         $total_seguidores = $row_count_seguidores['total_seguidores'];
         echo "<a href='cantidad_seguidores.php'>Total de seguidores: $total_seguidores</a>";
@@ -56,12 +59,15 @@ if (is_array($id_usuario)) {
         // Consulta para obtener el número de seguidos
         $sql_count_seguidos = "SELECT COUNT(*) as total_seguidos FROM seguidores WHERE id_seguidor = $id_usuario";
         $result_count_seguidos = mysqli_query($con, $sql_count_seguidos);
+        //convierte el resultado en un array asociativo, se extrae el valor de la columna
+        //total_seguidos y se almacena en variable $total_seguidos
         $row_count_seguidos = mysqli_fetch_assoc($result_count_seguidos);
         $total_seguidos = $row_count_seguidos['total_seguidos'];
         echo "<a href='cantidad_seguidos.php'>Total de seguidos: $total_seguidos</a>";
         ?>
     </div>
     <hr>
+    <!-- PUBLICACIONES DEL PERFIL DE USUARIO INICIADO -->
     <?php 
     $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario ORDER BY p.fecha_publicacion DESC";;
     $result_publicaciones = mysqli_query($con, $sql_publicaciones);
@@ -185,31 +191,6 @@ if (is_array($id_usuario)) {
                         var data = JSON.parse(response);
                         if (data.success) {
                             comentarioElement.remove();
-                        } else {
-                            alert(data.error);
-                        }
-                    }
-                });
-            });
-
-            // Manejar seguimiento de usuarios
-            $('.follow-btn').on('click', function() {
-                var button = $(this);
-                var id_siguiendo = button.data('id-siguiendo');
-                var action = button.text().trim() === 'Seguir' ? 'seguir' : 'dejar_de_seguir';
-
-                $.ajax({
-                    type: 'POST',
-                    url: action + '.php',
-                    data: { id_siguiendo: id_siguiendo },
-                    success: function(response) {
-                        var data = JSON.parse(response);
-                        if (data.success) {
-                            if (action === 'seguir') {
-                                button.text('Dejar de seguir');
-                            } else {
-                                button.text('Seguir');
-                            }
                         } else {
                             alert(data.error);
                         }

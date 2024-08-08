@@ -10,10 +10,11 @@ if (is_array($id_usuario_sesion)) {
     $id_usuario_sesion = $id_usuario_sesion['id_usuario'];
 }
 
+//Verifica si se paso un parametro id_usuario en la URL mediante el metodo GET
 if(isset($_GET['id_usuario'])){
+//Si id_usuario esta definido en la URL su valor se asigna la variable $id_usuario
     $id_usuario = $_GET['id_usuario'];
 } else {
-    // Redireccionar a un lugar adecuado si no se proporciona un id de usuario
     header('Location: index.php');
     exit();
 }
@@ -30,6 +31,7 @@ if(isset($_GET['id_usuario'])){
 <body>
     <?php include('lateral.php') ?>
     <?php 
+    //PERFIL DEL USUARIO QUE SE SELECCIONO
     $sql = "SELECT * FROM usuarios WHERE id_usuario = $id_usuario";
     $result = mysqli_query($con, $sql);
     while($row = mysqli_fetch_array($result)){
@@ -37,28 +39,26 @@ if(isset($_GET['id_usuario'])){
         <div class="content-perfil">
             <?php echo $row['username'] ?>
             <img width="150" height="180" src="<?php echo $row['foto_perfil']; ?>" alt="Foto de perfil">
-            <?php if ($id_usuario == $id_usuario_sesion) { ?>
-                <a href="editar_perfil.php?id_usuario=<?php echo $row['id_usuario']?>">Editar</a>
-            <?php } else { ?>
-                <!-- Mostrar el botón de seguir o dejar de seguir solo si no es el propio perfil -->
                 <div class="usuario">
                     <?php
+    //Selecciona toda las filas de tabla seguidores donde id_seguidor es ogiañ $id_usuario_sesion
+    //id_siguiendo es igual al identificador del usuario al que se esta viendo (otro perfil) $id_usuairo
                     $sql_check_follow = "SELECT * FROM seguidores WHERE id_seguidor = $id_usuario_sesion AND id_siguiendo = $id_usuario";
                     $result_check_follow = mysqli_query($con, $sql_check_follow);
+    //Si el numero de filas es mayor a 0, significa que el usuario en sesion ya esa siguiendo al perfil y se asigna true a  $is_following
                     $is_following = mysqli_num_rows($result_check_follow) > 0;
                     ?>
+                <!-- BOTON DE SEGUIMINTO -->
                     <button class="follow-btn" data-id-siguiendo="<?php echo $id_usuario; ?>">
                         <?php echo $is_following ? 'Dejar de seguir' : 'Seguir'; ?>
                     </button>
                 </div>
-            <?php } ?>
         </div>
     <?php       
     }
     ?>
     <hr>
-
-    <a href="explorar.php">Explorar</a>
+        <!-- SEGUIDOS Y SEGUIDORES -->
     <div class="seguidores">
         <h3>Seguidores</h3>
         <?php
@@ -82,12 +82,13 @@ if(isset($_GET['id_usuario'])){
         ?>
     </div>
     <hr>
+    <!-- PUBLICACIONES DEL PERFIL DE USUARIO INICIADO -->
     <?php 
     $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario";
     $result_publicaciones = mysqli_query($con, $sql_publicaciones);
     while ($row_publicacion = mysqli_fetch_array($result_publicaciones)) {
         $id_publicacion = $row_publicacion['id_publicacion'];
-
+        // Verificar si el usuario ya le ha dado "Me gusta" a esta publicación
         $sql_check_like = "SELECT * FROM megusta WHERE id_publicacion = '$id_publicacion' AND id_usuario = '$id_usuario_sesion'";
         $result_check_like = mysqli_query($con, $sql_check_like);
         $ya_le_gusta = mysqli_num_rows($result_check_like) > 0;
@@ -96,6 +97,7 @@ if(isset($_GET['id_usuario'])){
         <h2><?php echo $row_publicacion['username'] ?></h2>
         <img width="150" height="180" src="<?php echo $row_publicacion['imagen']; ?>" alt="Publicacion">
         <?php echo $row_publicacion['descripcion'] ?>
+    <!-- COMENTARIOS -->
         <div class="comentario">
             <form class="comentar-form" action="comentar.php" method="post">
                 <textarea name="comentario" placeholder="Comentar"></textarea>
@@ -117,6 +119,7 @@ if(isset($_GET['id_usuario'])){
             }
         ?>
         </div>
+        <!-- ME GUSTA -->
         <div class="like">
             <?php
             $sql_cantidad_like = "SELECT count(id_megusta) as total_megusta FROM megusta WHERE id_publicacion = $id_publicacion";

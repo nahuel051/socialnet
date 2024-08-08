@@ -7,13 +7,19 @@ if (!isset($_SESSION['registrar'])) {
     exit();
 }
 
+//Obtener el id del seguidor
+//la variable almacena el id del usuario que esta realizando la accion
 $id_seguidor = $_SESSION['registrar']['id_usuario'];
+//el POST obtiene el id del usuario que sea desea seguir
+//cuando se hace clic se envia desde una solicitud POST
+//la variable almacena este ID que representa al usuario que sea seguido por id_seguidor
 $id_siguiendo = $_POST['id_siguiendo'];
 
-if ($id_seguidor == $id_siguiendo) {
-    echo json_encode(['success' => false, 'error' => 'No puedes seguirte a ti mismo']);
-    exit();
-}
+// Verificación de Auto-seguimiento:
+// if ($id_seguidor == $id_siguiendo) {
+//     echo json_encode(['success' => false, 'error' => 'No puedes seguirte a ti mismo']);
+//     exit();
+// }
 
 $sql = "INSERT INTO seguidores (id_seguidor, id_siguiendo) VALUES ('$id_seguidor', '$id_siguiendo')";
 $result = mysqli_query($con, $sql);
