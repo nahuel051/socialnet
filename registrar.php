@@ -17,7 +17,7 @@ if($_POST){
         if($password !== $password2){
             $mensaje = "Las contraseña no coinciden.";
         }else if(!validarContraseña($password)){
-            $mensaje = "<ul> 
+            $mensaje = "<ul style='list-style: none'> 
             <li>Minimo 8 caracteres</li>
             <li>Minimo 1 mayuscula</li>
             <li>Minimo 1 numero</li>
