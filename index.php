@@ -23,10 +23,16 @@ if (is_array($id_usuario_sesion)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <div class="container">
+    <div class="header">
     <?php include('lateral.php')?>
+    </div>
+    <div class="container-publish">
     <?php 
    //Selecciona todos los campos de la tabla publicaciones y el username de la tabla usuarios
    //la tabla principal es publicaciones 
@@ -139,6 +145,8 @@ if (is_array($id_usuario_sesion)) {
     <?php
     }
     ?>
+    </div> <!-- Container publish -->
+    </div> <!-- container -->
    <script>
     $(document).ready(function() {
         $('.comentar-form').on('submit', function(event) {
@@ -272,5 +280,6 @@ if (is_array($id_usuario_sesion)) {
         });
     });
 </script>
+<script src="script.js"></script>
 </body>
 </html>
