@@ -15,8 +15,6 @@ body{
     height: 120px;
 }
 
-
-
 .navegador{
     display: flex;
     flex-direction: column;
@@ -27,7 +25,7 @@ body{
     width: 20vw;
     /* overflow: hidden; */
     box-sizing: border-box; /* Incluir padding y borde en el ancho total */
-
+    /* position: fixed; */
 
 }
 .nav-ul{
@@ -152,3 +150,131 @@ font-size: 12px;    }
         font-size: 15px;
     }
 }
+
+/* Publicaciones pantalla de inicio */
+.container-publish{
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content-post{
+    display: flex;
+    flex-direction: column;
+     border-bottom: 2px solid #fb6f92; 
+     width: 300px;
+     margin-top: 20px;
+}
+
+.content-post img{
+    width: 300px; 
+    height: 300px;
+}
+.content-post .username{
+    text-decoration: none;
+    font-size: 25px;
+    color: #003049;
+}
+
+.comentar-form textarea{
+    width: 250px;
+    height: 50px;
+    border-radius: 10px;
+    outline: none;
+    padding: 5px;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+  }
+
+  .btn-icon .material-icons {
+    font-size: 30px; /* Tamaño del icono */
+    color: #003049; /* Color del icono */
+    margin-left: 5px;
+  }
+
+  .section-coment{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .link_coment{
+    text-decoration: none;
+    color: #fb6f92;
+  }
+
+  .coment-cont{
+    width: 300px;
+    height: 150px;
+    overflow: scroll;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+
+  .delete-comentario{
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 2px;
+  }
+
+  .delete-comentario i{
+    font-size: 15px; /* Tamaño del icono */
+    color: #780000; /* Color del icono */
+    margin-left: 5px;
+  }
+
+  .like-index{
+    color: #fb6f92;
+  }
+
+/* Estilo para el checkbox personalizado */
+.like-checkbox {
+    width: 20px;
+    height: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 2px solid #fb6f92;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Estilo cuando el checkbox está marcado */
+  .like-checkbox:checked {
+    background-color: #fb6f92;
+    border-color: #fb6f92;
+  }
+  
+  /* Estilo del tilde */
+  .like-checkbox:checked::after {
+    content: '✔';
+    /* position: absolute; */
+    left: 3.2px;
+    top: -3px;
+    font-size: 16px;
+    color: #fff;
+  }
+  
+  .like{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
