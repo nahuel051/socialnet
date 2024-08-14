@@ -398,3 +398,18 @@ font-size: 12px;    }
     }
 }
 
+/* Publicaciones en perfil */
+.superior-post{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+}
+.superior-post i{
+margin-right: 5px;
+color: #003049;
+}
+
+.superior-post h2{
+    margin: 5px;
+    }
