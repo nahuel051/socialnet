@@ -27,7 +27,7 @@ if (is_array($id_usuario_sesion)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
-    <link rel="stylesheet" href="styles/estilo.css">
+    <link rel="stylesheet" href="estilos/estilo.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -87,6 +87,7 @@ if (is_array($id_usuario_sesion)) {
                 </div>
             </div> <!-- Parte superior-->
             <!-- PUBLICACIONES DEL PERFIL DE USUARIO INICIADO -->
+            <div class="contenedor-publish">
             <?php
             $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario ORDER BY p.fecha_publicacion DESC";
             ;
@@ -99,7 +100,7 @@ if (is_array($id_usuario_sesion)) {
                 $result_check_like = mysqli_query($con, $sql_check_like);
                 $ya_le_gusta = mysqli_num_rows($result_check_like) > 0;
                 ?>
-                <div class="content-post">
+                <div class="content-postindex">
                     <div class="superior-post">
                         <h2><?php echo $row_publicacion['username'] ?></h2>
                         <div><a href="delete.php?id_publicacion=<?php echo
@@ -187,6 +188,8 @@ if (is_array($id_usuario_sesion)) {
                 <?php
             }
             ?>
+
+    </div> <!-- contenedor publish -->
         </div> <!-- CONTAINER PERFIL -->
     </div> <!-- CONTAINER -->
     <script>
