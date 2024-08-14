@@ -278,3 +278,123 @@ font-size: 12px;    }
     justify-content: start;
     align-items: center;
   }
+
+/* PERFIL */
+.container-perfil{
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.content-perfil{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin: 0px;
+}
+
+.content-perfil img{
+    width:150px;
+    height: 150px;
+    padding: 0px;
+    margin: 0px;
+    margin-top: 10px;
+    border-radius: 50%;
+    border: 5px solid #fb6f92;
+}
+
+.superior-perfil{
+    display: flex;
+    width: 100%;
+    height: auto;
+    justify-content: space-around;
+    padding: 0px;
+    margin: 0px;
+    background-color: #003049;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+
+}
+
+
+.content-perfil p{
+    color: #fff;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+/* .editar-perfil{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+} */
+
+.content-perfil a{
+    text-align: center;
+    text-decoration: none;
+    background-color: #fb6f92;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+
+.seguidores{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.seguidos{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.seguidores h3, .seguidos h3{
+    color: #fff;
+    margin-bottom: 0;
+}
+
+.seguidores a, .seguidos a{
+    color: #fb6f92;
+    text-decoration: none;
+    text-align: center;
+}
+.seguidores a:hover, .seguidos a:hover{
+    color: #fff;
+}
+
+@media screen and (max-width: 500px) {
+    .content-perfil img{
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media screen and (max-width: 352px) {
+    .content-perfil a{
+        font-size: 15px;
+        padding: 4px;
+    }
+    .seguidores h3, .seguidos h3{
+        font-size: 15px;
+    }
+    .seguidores a, .seguidos a{
+        font-size: 15px;
+    }
+}
+

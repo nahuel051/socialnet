@@ -17,27 +17,39 @@ if (is_array($id_usuario)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
+     <link rel="stylesheet" href="styles/estilo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <?php include('lateral.php') ?>
+    <div class="container">
+    <div class="header">
+        <?php include('lateral.php') ?>
+    </div>
+    <div class="container-perfil">
     <?php 
     //PERFIL DEL USUARIO INICIADO SESION
     $sql = "SELECT * FROM usuarios WHERE id_usuario = $id_usuario";
     $result = mysqli_query($con, $sql);
     while($row = mysqli_fetch_array($result)){
     ?>
+    <div class="superior-perfil">
+
+
         <div class="content-perfil">
-            <?php echo $row['username'] ?>
-            <img width="150" height="180" src="<?php echo $row['foto_perfil']; ?>" alt="Foto de perfil">
-            <a href="editar_perfil.php?id_usuario=<?php echo $row['id_usuario']?>">Editar</a>
+            <img  src="<?php echo $row['foto_perfil']; ?>" alt="Foto de perfil">
+            <p><?php echo  $row['username'] ?></p>
+            <a href="editar_perfil.php?id_usuario=<?php echo $row['id_usuario']?>">Editar perfil</a>
         </div>
+        <!-- <div class="editar-perfil">
+        </div> -->
     <?php       
     }
     ?>
-    <hr>
     <!-- SEGUIDOS Y SEGUIDORES -->
-    <a href="explorar.php">Explorar</a>
     <div class="seguidores">
         <h3>Seguidores</h3>
         <?php
@@ -51,8 +63,6 @@ if (is_array($id_usuario)) {
         echo "<a href='cantidad_seguidores.php'>Total de seguidores: $total_seguidores</a>";
         ?>
     </div>
-
-    <hr>
     <div class="seguidos">
         <h3>Seguidos</h3>
         <?php
@@ -66,7 +76,7 @@ if (is_array($id_usuario)) {
         echo "<a href='cantidad_seguidos.php'>Total de seguidos: $total_seguidos</a>";
         ?>
     </div>
-    <hr>
+    </div>    <!-- Parte superior-->
     <!-- PUBLICACIONES DEL PERFIL DE USUARIO INICIADO -->
     <?php 
     $sql_publicaciones = "SELECT p.*, u.username FROM publicaciones p JOIN usuarios u ON p.id_usuario = u.id_usuario WHERE p.id_usuario = $id_usuario ORDER BY p.fecha_publicacion DESC";;
@@ -122,6 +132,8 @@ if (is_array($id_usuario)) {
     <?php
     }
     ?>
+        </div>  <!-- CONTAINER PERFIL -->
+    </div> <!-- CONTAINER -->
     <script>
         $(document).ready(function() {
             $('.comentar-form').on('submit', function(event) {
@@ -199,5 +211,6 @@ if (is_array($id_usuario)) {
             });
         });
     </script>
+        <script src="script.js"></script>
 </body>
 </html>
