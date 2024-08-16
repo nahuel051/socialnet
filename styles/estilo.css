@@ -439,3 +439,17 @@ color: #003049;
     font-size: 25px;
     color: #003049;
 }
+
+
+.follow-btn{
+    text-align: center;
+    text-decoration: none;
+    background-color: #fb6f92;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
