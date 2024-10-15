@@ -1,3 +1,5 @@
+Red social similar a Instagram, creada con PHP, MySQL, jQuery, HTML y CSS. Permite subir imágenes y videos, comentar y dar 'me gusta' a publicaciones, seguir o dejar de seguir usuarios, recibir notificaciones y explorar contenido. Aunque el diseño falta terminar, el sistema es completamente funcional.
+Imagenes:
 [![login.png](https://i.postimg.cc/tCgs56Mb/login.png)](https://postimg.cc/SjwQQn41)
 [![registrar.png](https://i.postimg.cc/9fy0MYrd/registrar.png)](https://postimg.cc/bGNpVb0r)
 [![inicio.png](https://i.postimg.cc/Pxhx8vwB/inicio.png)](https://postimg.cc/GB7rW2zQ)
